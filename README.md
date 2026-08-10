@@ -9,7 +9,7 @@ DOWNLOAD LINK: https://github.com/Dere-Wah/Skript-AnvilGUI/releases/
 # Skript-AnvilGUI ![Downloads](https://img.shields.io/github/downloads/DereWah/Skript-AnvilGUI/total) ![Downloads](https://img.shields.io/github/downloads/Dere-Wah/Skript-AnvilGUI/total)
 
 A Skript Addon that allows users to create Anvil GUIs to read user input.
-The skript works with Paper/Spigot 1.12+ and requires Skript 2.6+
+The skript works with Paper/Spigot 1.12 up to 26.2 and requires Skript 2.15+
 
 # Tutorial
 
@@ -21,9 +21,13 @@ Docs can be found below.
 # IMPORTANT
 
 If you are using the addon in Skript version 2.7+, please use the expression "virtual anvil" instead of "anvil gui".
-For example, use "text of event-virtual anvil" instead of "text of event-anvil gui".
+For example, use "anvil gui text of event-virtual anvil" instead of "text of event-anvil gui".
 
 If you are on a lower version, you should be good both
+
+On Skript 2.15+, use "anvil gui title of %virtualanvil%" and "anvil gui text of %virtualanvil%".
+Skript itself now owns the plain "title of" and "text of" syntaxes, so those return nothing when used
+on an anvil gui. The item slot expressions are unaffected.
 
 ![Stats](https://bstats.org/signatures/bukkit/Skript-AnvilGUI.svg)
 
@@ -69,7 +73,7 @@ You can create a new object with the new anvil gui expression and edit its conte
 
 		```
             on anvil gui click:
-                set title of event-virtual anvil to event-text
+                set anvil gui title of event-virtual anvil to event-text
                 open anvil gui event-virtual anvil to player
                 #this will move the text in the anvil gui input to the name of the inventory
 		```
@@ -91,7 +95,7 @@ event-text (content of the GUI when the GUI was closed), event-anvil gui (the or
 
         ```
             on anvil gui close:
-                if title of event-virtual anvil is "You can't close this unless you type 1234":
+                if anvil gui title of event-virtual anvil is "You can't close this unless you type 1234":
                     if event-text is not "1234":
                         cancel event
 		```
@@ -117,12 +121,12 @@ event-anvil gui (the original anvil object. You can access items in the anvil GU
 
             on anvil gui click:
                 if event-integer is 2: #clicked the output item slot
-                    if title of event-virtual anvil is "&0Insert password":
+                    if anvil gui title of event-virtual anvil is "&0Insert password":
                         if event-text is "1234":
                             close player's inventory
                             send message "&aCorrect password."
                         else:
-                            set text of event-virtual anvil to "Wrong password"
+                            set anvil gui text of event-virtual anvil to "Wrong password"
                             open anvil gui event-virtual anvil to player #reopen the anvil gui, but with a different text.
 		```
 </details>
@@ -139,16 +143,22 @@ Returns a new anvil gui. If no title and default text are specified, it will use
 
 ### Anvil GUI TItle
 ```
+[the] anvil [gui] title of %virtualanvil%
+%virtualanvil%'[s] anvil [gui] title
 [the] title of %virtualanvil%
 ```
+On Skript 2.15+ only the "anvil gui title" forms work, as Skript itself claims the plain "title of" syntax.
 
 Access the title (inventory name) of an Anvil GUI. In 1.12.2, the name of the AnvilGUI will not change when displayed.
 This is not really an issue (other than for aesthetic) as the title is still saved and can be accessed (to check for specific anvil GUIs in events).
 
 ### Anvil GUI Text
 ```
-text of %virtualanvil%
+[the] anvil [gui] text of %virtualanvil%
+%virtualanvil%'[s] anvil [gui] text
+[the] text of %virtualanvil%
 ```
+On Skript 2.15+ only the "anvil gui text" forms work, as Skript itself claims the plain "text of" syntax.
 
 Access the default text of an AnvilGUI. This will be filled when the anvil is opened to a player.
 
