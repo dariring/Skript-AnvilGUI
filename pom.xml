@@ -6,14 +6,22 @@
 
     <groupId>org.derewah</groupId>
     <artifactId>Skript-AnvilGUI</artifactId>
-    <version>1.12</version>
+    <version>${revision}${changelist}</version>
 
     <properties>
+        <revision>1.12</revision>
+        <changelist></changelist>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -121,4 +129,18 @@
         </dependency>
     </dependencies>
 
+
+  <profiles>
+    <profile>
+      <id>ci-version</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_RUN_NUMBER</name>
+        </property>
+      </activation>
+      <properties>
+        <changelist>-build.${env.GITHUB_RUN_NUMBER}.${env.GITHUB_RUN_ATTEMPT}</changelist>
+      </properties>
+    </profile>
+  </profiles>
 </project>
