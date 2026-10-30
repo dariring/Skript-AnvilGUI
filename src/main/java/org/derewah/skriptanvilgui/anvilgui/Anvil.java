@@ -2,6 +2,7 @@ package org.derewah.skriptanvilgui.anvilgui;
 
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.derewah.skriptanvilgui.SkriptAnvilGUI;
@@ -35,7 +36,13 @@ public class Anvil {
                     Bukkit.getPluginManager().callEvent(new BridgeAnvilClick(slot, stateSnapshot, this))));
         });
         builder.onClose(stateSnapshot -> {
-            Bukkit.getPluginManager().callEvent(new BridgeAnvilClose(stateSnapshot, this));});
+            BridgeAnvilClose event = new BridgeAnvilClose(stateSnapshot, this);
+            Bukkit.getPluginManager().callEvent(event);
+            // Decided after all the triggers ran: one reopen however many times it was cancelled
+            if (event.isCancelled()) {
+                openAnvil(stateSnapshot.getPlayer());
+            }
+        });
     }
 
     public void setText(String text){
@@ -58,7 +65,8 @@ public class Anvil {
 
     public void setItemLeft(ItemStack item){
         this.itemLeft = item;
-        this.builder.itemLeft(item);
+        // AnvilGUI writes the text in the meta of the left item when opening, air has none
+        this.builder.itemLeft(item.getItemMeta() == null ? new ItemStack(Material.PAPER) : item);
     }
 
     public ItemStack getItemLeft(){
@@ -88,7 +96,16 @@ public class Anvil {
     }
 
     public void openAnvil(Player player){
-        Bukkit.getScheduler().runTaskLater(SkriptAnvilGUI.getInstance(), () -> getBuilder().open(player), 1);
+        Bukkit.getScheduler().runTaskLater(SkriptAnvilGUI.getInstance(), () -> open(player), 1);
+    }
+
+    /**
+     * Opens the gui now. Nothing would ever close it for an offline player and its listener would stay registered.
+     */
+    public void open(Player player){
+        if (player.isOnline()) {
+            getBuilder().open(player);
+        }
     }
 
 
