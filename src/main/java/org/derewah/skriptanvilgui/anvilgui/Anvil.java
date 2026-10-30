@@ -2,6 +2,7 @@ package org.derewah.skriptanvilgui.anvilgui;
 
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.derewah.skriptanvilgui.SkriptAnvilGUI;
@@ -64,7 +65,8 @@ public class Anvil {
 
     public void setItemLeft(ItemStack item){
         this.itemLeft = item;
-        this.builder.itemLeft(item);
+        // AnvilGUI writes the text in the meta of the left item when opening, air has none
+        this.builder.itemLeft(item.getItemMeta() == null ? new ItemStack(Material.PAPER) : item);
     }
 
     public ItemStack getItemLeft(){
