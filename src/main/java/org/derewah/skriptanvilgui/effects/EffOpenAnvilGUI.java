@@ -32,7 +32,7 @@ public class EffOpenAnvilGUI extends Effect {
         Anvil anvil = exprAnvil.getSingle(event);
         Player player = exprPlayer.getSingle(event);
         if(anvil != null && player != null){
-            anvil.getBuilder().open(player);
+            anvil.open(player);
         }
     }
 

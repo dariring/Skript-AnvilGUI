@@ -1,11 +1,9 @@
 package org.derewah.skriptanvilgui.events.Anvil;
 
 import net.wesjd.anvilgui.AnvilGUI;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.derewah.skriptanvilgui.SkriptAnvilGUI;
 import org.derewah.skriptanvilgui.anvilgui.Anvil;
 
 public class BridgeAnvilClose extends Event implements Cancellable {
@@ -46,9 +44,6 @@ public class BridgeAnvilClose extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean b) {
-        if(b){
-            anvil.openAnvil(state.getPlayer());
-            cancelled = true;
-        }
+        cancelled = b;
     }
 }
